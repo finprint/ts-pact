@@ -1,0 +1,28 @@
+{
+  "name": "ts-pact",
+  "version": "0.1.0",
+  "author": "Blend",
+  "license": "MIT",
+  "description": "TypeScript library for running and deploying Pact code.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blend/ts-pact.git"
+  },
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "compile": "tsc",
+    "compile:watch": "npm run compile -- --watch",
+    "genkey": "pact -g",
+    "install": "[ ! -d dist ] && npm run compile || true",
+    "start": "rm -rf ./log && mkdir log && pact --serve server.conf"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "pact-lang-api": "https://github.com/kadena-io/pact-lang-api.git#c63892c"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.4",
+    "typescript": "^3.5.1"
+  }
+}
