@@ -1,4 +1,4 @@
-# ts-pact
+# pact-ts
 
 TypeScript library for running and deploying Pact code.
 
