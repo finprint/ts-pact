@@ -1,10 +1,10 @@
 // TODO: Support keysets other than just a single key.
 export class Keyset {
-  name: string
   publicKey: string
-  constructor(name: string, publicKey: string) {
-    this.name = name
+  name: string
+  constructor(publicKey: string, name: string = publicKey) {
     this.publicKey = publicKey
+    this.name = name
   }
 }
 
@@ -15,7 +15,7 @@ export class PactExpr {
   }
 }
 
-export function keysetData(name: string, publicKey: string) {
+export function keysetData(publicKey: string, name: string) {
   return { [name]: [publicKey] }
 }
 
