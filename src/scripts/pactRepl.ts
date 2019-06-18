@@ -5,6 +5,7 @@
 import readline from 'readline'
 
 import PactApi from '../pactApi'
+import * as pactUtils from '../pactUtils'
 import * as config from './config'
 
 async function prompt(message: string): Promise<string> {
@@ -29,6 +30,7 @@ async function main(): Promise<void> {
     await pactApi.eval({
       code: line,
       keyPair: adminKeyPair,
+      data: pactUtils.keysetData(adminKeyPair, 'my-keyset'),
     }).then(console.log).catch(console.error)
   }
 }
