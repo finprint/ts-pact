@@ -1,7 +1,9 @@
-import _PactApi from './pactApi'
-import * as types from './types'
-import * as _pactUtils from './pactUtils'
+import PactApi from './pactApi'
+import * as pactUtils from './pactUtils'
+import { IKeyPair } from './types'
 
-export const PactApi = _PactApi
-export import IKeyPair = types.IKeyPair
-export import pactUtils = _pactUtils
+export {
+  IKeyPair,
+  PactApi,
+  pactUtils,
+}
