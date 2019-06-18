@@ -30,7 +30,7 @@ async function main(): Promise<void> {
     await pactApi.eval({
       code: line,
       keyPair: adminKeyPair,
-      data: pactUtils.keysetData(adminKeyPair, 'my-keyset'),
+      data: pactUtils.keysetData('my-keyset', adminKeyPair.publicKey),
     }).then(console.log).catch(console.error)
   }
 }
