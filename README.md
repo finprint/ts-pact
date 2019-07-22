@@ -12,7 +12,7 @@ for instructions.
 
 ```typescript
 import pactLang from 'pact-lang-api'
-import PactApi, { IKeyPair, pactUtils } from 'ts-pact'
+import PactApi, { IKeyPair, pactUtils } from 'pact-ts'
 
 const keyPair = pactLang.crypto.genKeyPair()
 const args = [
