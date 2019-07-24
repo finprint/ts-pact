@@ -5,7 +5,11 @@ import * as pactUtils from './pactUtils'
 import { IKeyPair } from './types'
 
 function generateKeyPair(): IKeyPair {
-  return pactLang.crypto.genKeyPair()
+  const { publicKey, secretKey } = pactLang.crypto.genKeyPair()
+  return {
+    publicKey,
+    privateKey: secretKey,
+  }
 }
 
 export {
