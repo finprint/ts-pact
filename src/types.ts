@@ -4,5 +4,5 @@
 
 export interface IKeyPair {
   publicKey: string
-  secretKey: string
+  privateKey: string
 }
