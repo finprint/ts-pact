@@ -54,10 +54,10 @@ export interface IListenResult {
 
 // Example meta object. Currently we just send this with every transaction.
 const META = {
-  'chainId': '16',
-  'gasPrice': 1,
-  'gasLimit': 100000,
-  'sender': 'someSender'
+  chainId: '16',
+  gasPrice: 1,
+  gasLimit: 100000,
+  sender: 'someSender',
 }
 
 function generateNonce(): string {
@@ -109,7 +109,7 @@ export default class PactApi {
     const code: string = (options.codeFile ? await loadFile(options.codeFile) : options.code) || ''
     const data: {} = (options.dataFile ? JSON.parse(await loadFile(options.dataFile)) : options.data) || {}
     return pact.simple.exec.createCommand(
-      options.keyPair,
+      { publicKey: options.keyPair.publicKey, secretKey: options.keyPair.privateKey },
       nonce,
       code,
       data,
