@@ -1,5 +1,4 @@
-import pactLang from 'pact-lang-api'
-
+import * as pactUtils from '../pactUtils'
 import { IKeyPair } from '../types'
 
 /**
@@ -12,7 +11,7 @@ export function getAdminKeyPair(): IKeyPair {
       privateKey: process.env.PACT_ADMIN_PRIVATE,
     }
   }
-  return pactLang.crypto.genKeyPair()
+  return pactUtils.generateKeyPair()
 }
 
 export function getUrl(): string {

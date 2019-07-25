@@ -1,3 +1,7 @@
+import pactLang from 'pact-lang-api'
+
+import { IKeyPair } from './types'
+
 // TODO: Support keysets other than just a single key.
 export class Keyset {
   publicKey: string
@@ -12,6 +16,14 @@ export class PactExpr {
   expr: string
   constructor(expr: string) {
     this.expr = expr
+  }
+}
+
+export function generateKeyPair(): IKeyPair {
+  const { publicKey, secretKey } = pactLang.crypto.genKeyPair()
+  return {
+    publicKey,
+    privateKey: secretKey,
   }
 }
 
