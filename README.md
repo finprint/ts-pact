@@ -20,7 +20,7 @@ const args = [
   pactUtils.keyset('account-keyset'),
 ]
 const code = pactUtils.makeExpr('accounts.create-account', args)
-const data = pactUtils.keysetData(keyPair, 'account-keyset')
+const data = pactUtils.keysetData(keyPair.publicKey, 'account-keyset')
 return this.pactApi.eval({
   code,
   data,
