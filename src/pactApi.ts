@@ -4,7 +4,7 @@
 
 import fs from 'fs'
 import pact from 'pact-lang-api'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 
 import { IKeyPair } from './types'
 
@@ -77,7 +77,8 @@ function loadFile(fileName: string): Promise<string> {
 }
 
 export default class PactApi {
-  baseUrl: string
+  readonly baseUrl: string
+  requestTimeoutMs: number = 0
 
   constructor(host: string) {
     this.baseUrl = `${host}/api/v1`
@@ -88,7 +89,10 @@ export default class PactApi {
    */
   async _post(endpoint: string, payload: {}) {
     try {
-      const response = await axios.post(`${this.baseUrl}${endpoint}`, payload)
+      const requestConfig: AxiosRequestConfig = {
+        timeout: this.requestTimeoutMs,
+      }
+      const response = await axios.post(`${this.baseUrl}${endpoint}`, payload, requestConfig)
       return response.data
     } catch (error) {
       if (error.response) {
