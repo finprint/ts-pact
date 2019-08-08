@@ -4,9 +4,9 @@ import { IKeyPair } from './types'
 
 // TODO: Support keysets other than just a single key.
 export class Keyset {
-  publicKey: string
+  publicKey: Buffer
   name: string
-  constructor(publicKey: string, name: string = publicKey) {
+  constructor(publicKey: Buffer, name: string = publicKey.toString('hex')) {
     this.publicKey = publicKey
     this.name = name
   }
@@ -38,7 +38,7 @@ export function makeExprAndData(functionName: string, args: {}[]): [string, {}] 
   const data: {[name: string]: {}} = {}
   const argsString = args.map(x => {
     if (x instanceof Keyset) {
-      data[x.name] = [x.publicKey]
+      data[x.name] = [x.publicKey.toString('hex')]
       return `(read-keyset "${x.name}")`
     } else if (x instanceof PactExpr) {
       return x.expr
