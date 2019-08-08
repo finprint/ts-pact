@@ -1,17 +1,17 @@
-interface KeyPair {
-  publicKey: string,
-  secretKey: string,
-}
-
-interface SendRequest {
-  cmds: {
-    hash: string
-    sigs: {}[]
-    cmd: string
-  }[]
-}
-
 declare module 'pact-lang-api' {
+  interface KeyPair {
+    publicKey: string,
+    secretKey: string,
+  }
+
+  interface SendRequest {
+    cmds: {
+      hash: string
+      sigs: {}[]
+      cmd: string
+    }[]
+  }
+
   var crypto: {
     genKeyPair: () => KeyPair
   }
