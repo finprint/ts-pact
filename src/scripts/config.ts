@@ -7,8 +7,8 @@ import { IKeyPair } from '../types'
 export function getAdminKeyPair(): IKeyPair {
   if (process.env.PACT_ADMIN_PUBLIC && process.env.PACT_ADMIN_PRIVATE) {
     return {
-      publicKey: process.env.PACT_ADMIN_PUBLIC,
-      privateKey: process.env.PACT_ADMIN_PRIVATE,
+      publicKey: Buffer.from(process.env.PACT_ADMIN_PUBLIC, 'hex'),
+      privateKey: Buffer.from(process.env.PACT_ADMIN_PRIVATE, 'hex'),
     }
   }
   return pactUtils.generateKeyPair()

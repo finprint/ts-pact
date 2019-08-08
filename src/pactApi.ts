@@ -112,7 +112,10 @@ export default class PactApi {
     const nonce = options.nonce || generateNonce()
     const code: string = (options.codeFile ? await loadFile(options.codeFile) : options.code) || ''
     const data: {} = (options.dataFile ? JSON.parse(await loadFile(options.dataFile)) : options.data) || {}
-    const keyPair = { publicKey: options.keyPair.publicKey, secretKey: options.keyPair.privateKey }
+    const keyPair = {
+      publicKey: options.keyPair.publicKey.toString('hex'),
+      secretKey: options.keyPair.privateKey.toString('hex'),
+    }
     return pact.simple.exec.createCommand(
       keyPair,
       nonce,

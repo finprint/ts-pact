@@ -22,13 +22,13 @@ export class PactExpr {
 export function generateKeyPair(): IKeyPair {
   const { publicKey, secretKey } = pactLang.crypto.genKeyPair()
   return {
-    publicKey,
-    privateKey: secretKey,
+    publicKey: Buffer.from(publicKey, 'hex'),
+    privateKey: Buffer.from(secretKey, 'hex'),
   }
 }
 
-export function keysetData(publicKey: string, name: string) {
-  return { [name]: [publicKey] }
+export function keysetData(publicKey: Buffer, name: string) {
+  return { [name]: [publicKey.toString('hex')] }
 }
 
 /**
