@@ -3,6 +3,6 @@
  */
 
 export interface IKeyPair {
-  publicKey: string
-  privateKey: string
+  publicKey: Buffer
+  privateKey: Buffer
 }

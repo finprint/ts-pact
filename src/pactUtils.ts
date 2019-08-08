@@ -4,9 +4,10 @@ import { IKeyPair } from './types'
 
 // TODO: Support keysets other than just a single key.
 export class Keyset {
-  publicKey: string
+  publicKey: Buffer
   name: string
-  constructor(publicKey: string, name: string = publicKey) {
+
+  constructor(publicKey: Buffer, name: string = publicKey.toString('hex')) {
     this.publicKey = publicKey
     this.name = name
   }
@@ -14,6 +15,7 @@ export class Keyset {
 
 export class PactExpr {
   expr: string
+
   constructor(expr: string) {
     this.expr = expr
   }
@@ -22,13 +24,13 @@ export class PactExpr {
 export function generateKeyPair(): IKeyPair {
   const { publicKey, secretKey } = pactLang.crypto.genKeyPair()
   return {
-    publicKey,
-    privateKey: secretKey,
+    publicKey: Buffer.from(publicKey, 'hex'),
+    privateKey: Buffer.from(secretKey, 'hex'),
   }
 }
 
-export function keysetData(publicKey: string, name: string) {
-  return { [name]: [publicKey] }
+export function keysetData(publicKey: Buffer, name: string) {
+  return { [name]: [publicKey.toString('hex')] }
 }
 
 /**
@@ -38,7 +40,7 @@ export function makeExprAndData(functionName: string, args: {}[]): [string, {}] 
   const data: {[name: string]: {}} = {}
   const argsString = args.map(x => {
     if (x instanceof Keyset) {
-      data[x.name] = [x.publicKey]
+      Object.assign(data, keysetData(x.publicKey, x.name))
       return `(read-keyset "${x.name}")`
     } else if (x instanceof PactExpr) {
       return x.expr
