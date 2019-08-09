@@ -1,6 +1,6 @@
 {
   "name": "pact-ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Blend",
   "license": "MIT",
   "description": "TypeScript library for running and deploying Pact code.",
