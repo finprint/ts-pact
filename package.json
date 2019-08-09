@@ -19,10 +19,14 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
-    "pact-lang-api": "https://github.com/kadena-io/pact-lang-api.git#c63892c"
+    "lodash": "4.17.15",
+    "pact-lang-api": "https://github.com/kadena-io/pact-lang-api.git#c63892c",
+    "tmp": "0.1.0"
   },
   "devDependencies": {
+    "@types/lodash": "4.14.136",
     "@types/node": "^12.0.4",
+    "@types/tmp": "0.1.0",
     "typescript": "^3.5.1"
   }
 }
