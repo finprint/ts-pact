@@ -116,6 +116,11 @@ export default class PactApi {
       publicKey: options.keyPair.publicKey.toString('hex'),
       secretKey: options.keyPair.privateKey.toString('hex'),
     }
+    if (!keyPair.publicKey) {
+      throw new Error('Public key is empty.')
+    } else if (!keyPair.secretKey) {
+      throw new Error('Private key is empty.')
+    }
     return pact.simple.exec.createCommand(
       keyPair,
       nonce,
