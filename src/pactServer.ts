@@ -1,5 +1,5 @@
 import { chomp, chunksToLinesAsync } from '@rauschma/stringio'
-import childProcess, { ExecOptions } from 'child_process'
+import { ChildProcess, ExecOptions, spawn } from 'child_process'
 import fs from 'fs'
 import _ from 'lodash'
 import net from 'net'
@@ -54,6 +54,7 @@ class Process {
   private readonly options: ExecOptions
   private readonly stdoutCallbacks: LogCallback[] = []
   private readonly stderrCallbacks: LogCallback[] = []
+  private childProcess?: ChildProcess
   private _onExitPromise?: Promise<void>
   private _started = false
 
@@ -81,33 +82,39 @@ class Process {
       throw new Error('Process already started.')
     }
     this._started = true
-
-    const process = childProcess.spawn(this.path, this.args, this.options)
+    this.childProcess = spawn(this.path, this.args, this.options)
 
     setImmediate(async () => {
-      for await (const line of chunksToLinesAsync(process.stdout as AsyncIterable<string>)) {
+      for await (const line of chunksToLinesAsync(this.childProcess!.stdout as AsyncIterable<string>)) {
         await Promise.all(_.map(this.stdoutCallbacks, async (callback: LogCallback) => { await callback(chomp(line)) }))
       }
     })
 
     setImmediate(async () => {
-      for await (const line of chunksToLinesAsync(process.stderr as AsyncIterable<string>)) {
+      for await (const line of chunksToLinesAsync(this.childProcess!.stderr as AsyncIterable<string>)) {
         await Promise.all(_.map(this.stderrCallbacks, async (callback: LogCallback) => { await callback(chomp(line)) }))
       }
     })
 
     this._onExitPromise = new Promise((resolve, reject) => {
-      process.once('exit', (code: number, _signal: string) => {
+      this.childProcess!.once('exit', (code: number, _signal: string) => {
         if (code === 0) {
           resolve()
         } else {
           reject(new Error(`Process exited with error code: ${code}`))
         }
       })
-      process.once('error', (error: Error) => {
+      this.childProcess!.once('error', (error: Error) => {
         reject(error)
       })
     })
+  }
+
+  kill(): void {
+    if (!this.childProcess) {
+      throw new Error('Process was not started.')
+    }
+    this.childProcess.kill()
   }
 
   addStdoutCallback(callback: LogCallback) {
@@ -268,6 +275,7 @@ export default class PactServer {
         pactProcess.addStderrCallback(startupLogCallback)
 
         pactProcess.start()
+        process.on('exit', () => { pactProcess.kill() })
         pactProcess.onExitPromise.catch(reject)
 
         setTimeout(() => {
