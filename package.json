@@ -15,9 +15,11 @@
     "compile:watch": "npm run compile -- --watch",
     "genkey": "pact -g",
     "install": "[ ! -d dist ] && npm run compile || true",
-    "start": "rm -rf ./log && mkdir log && pact --serve server.conf"
+    "repl": "node dist/src/scripts/pactRepl.js",
+    "start": "node dist/src/scripts/runServer.js"
   },
   "dependencies": {
+    "@rauschma/stringio": "^1.4.0",
     "axios": "^0.19.0",
     "lodash": "4.17.15",
     "pact-lang-api": "https://github.com/kadena-io/pact-lang-api.git#c63892c",
@@ -25,7 +27,7 @@
   },
   "devDependencies": {
     "@types/lodash": "4.14.136",
-    "@types/node": "^12.0.4",
+    "@types/node": "12.7.2",
     "@types/tmp": "0.1.0",
     "typescript": "^3.5.1"
   }
