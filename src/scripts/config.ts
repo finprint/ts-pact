@@ -1,6 +1,8 @@
 import * as pactUtils from '../pactUtils'
 import { IKeyPair } from '../types'
 
+export const DEFAULT_PORT = 9444
+
 /**
  * Get the admin key pair from environmental variables, or default to a random key.
  */
@@ -15,5 +17,5 @@ export function getAdminKeyPair(): IKeyPair {
 }
 
 export function getUrl(): string {
-  return process.env.PACT_URL || 'http://localhost:9444'
+  return process.env.PACT_URL || `http://localhost:${DEFAULT_PORT}`
 }
