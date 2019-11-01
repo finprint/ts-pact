@@ -4,12 +4,14 @@ declare module 'pact-lang-api' {
     secretKey: string,
   }
 
+  interface LocalRequest {
+    hash: string
+    sigs: {}[]
+    cmd: string
+  }
+
   interface SendRequest {
-    cmds: {
-      hash: string
-      sigs: {}[]
-      cmd: string
-    }[]
+    cmds: LocalRequest[]
   }
 
   var crypto: {
@@ -19,6 +21,7 @@ declare module 'pact-lang-api' {
   var simple: {
     exec: {
       createCommand: (keyPair: KeyPair, nonce: string, code: string, data: {}, meta: {}) => SendRequest
+      createLocalCommand: (keyPair: KeyPair, nonce: string, code: string, data: {}, meta: {}) => LocalRequest
       createListenRequest: (sendRequest: SendRequest) => { requestKey: string }
     }
   }

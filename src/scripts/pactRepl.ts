@@ -8,6 +8,8 @@ import PactApi from '../pactApi'
 import * as pactUtils from '../pactUtils'
 import * as config from './config'
 
+const LOCAL_MODE = '--local' in process.argv
+
 async function prompt(message: string): Promise<string> {
   const reader = readline.createInterface({
     input: process.stdin,
@@ -23,11 +25,12 @@ async function prompt(message: string): Promise<string> {
 
 async function main(): Promise<void> {
   const pactApi = new PactApi(config.getUrl())
+  const evalFn = (LOCAL_MODE ? pactApi.eval : pactApi.evalLocal).bind(pactApi)
   const adminKeyPair = config.getAdminKeyPair()
 
   while (true) {
     const line = await prompt('> ')
-    await pactApi.eval({
+    await evalFn({
       code: line,
       keyPair: adminKeyPair,
       data: pactUtils.keysetData(adminKeyPair.publicKey, 'my-keyset'),
