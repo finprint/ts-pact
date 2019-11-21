@@ -31,7 +31,7 @@ async function main(): Promise<void> {
       code: line,
       keyPair: adminKeyPair,
       data: pactUtils.keysetData(adminKeyPair.publicKey, 'my-keyset'),
-    }).then(console.log).catch(console.error)
+    }).then(x => console.log(`[${typeof x}] ${JSON.stringify(x)}`)).catch(console.error)
   }
 }
 
