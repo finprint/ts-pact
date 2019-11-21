@@ -2,7 +2,7 @@
   "name": "pact-ts",
   "version": "0.1.1",
   "author": "Blend",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "description": "TypeScript library for running and deploying Pact code.",
   "repository": {
     "type": "git",
