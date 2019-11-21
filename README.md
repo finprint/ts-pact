@@ -30,12 +30,12 @@ return this.pactApi.eval({
 
 ## Running scripts
 
-This package comes with a few utility scripts in `src/scripts/.`
+This package comes with some utility scripts in `src/scripts/`.
 The scripts will look in the environmental variables for a Pact key and URL
 to use when sending transactions, falling back to defaults if these are not available.
 See `src/scripts/config.ts` for details.
 
-Compile the Node scripts:
+Compile scripts:
 
 ```
 yarn compile
@@ -53,8 +53,7 @@ Deploy a contract or run a Pact script:
 node dist/src/scripts/runFile.js
 ```
 
-Example Node script for running a combination of files and commands in order to
-deploy and initialize a set of smart contracts:
+Example: deploy and initialize a set of smart contracts:
 
 ```
 node dist/src/scripts/deployContracts.js
