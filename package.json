@@ -1,12 +1,12 @@
 {
   "name": "ts-pact",
   "version": "0.1.1",
-  "author": "Blend",
+  "author": "Finprint",
   "license": "MIT",
   "description": "TypeScript library for running and deploying Pact code.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/blend/ts-pact.git"
+    "url": "https://github.com/finprint/ts-pact.git"
   },
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
