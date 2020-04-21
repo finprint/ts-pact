@@ -17,13 +17,16 @@ export interface ISendOptions {
   keyPair: IKeyPair
 }
 
+// The request format expected by the /local endpoint.
+export interface ILocalRequest {
+  hash: string
+  sigs: {}[]
+  cmd: string
+}
+
 // The request format expected by the /send endpoint.
 export interface ISendRequest {
-  cmds: {
-    hash: string
-    sigs: {}[]
-    cmd: string
-  }[]
+  cmds: ILocalRequest[]
 }
 
 // The response format returned by the /send endpoint.
@@ -53,11 +56,15 @@ export interface IListenResult {
 }
 
 // Example meta object. Currently we just send this with every transaction.
-const META = {
-  chainId: '16',
-  gasPrice: 1,
-  gasLimit: 100000,
-  sender: 'someSender',
+function meta() {
+  return {
+    sender: 'someSender',
+    chainId: '16',
+    gasPrice: 1,
+    gasLimit: 100000,
+    creationTime: Date.now() / 1000,
+    ttl: 6000, // 10 minutes
+  }
 }
 
 function generateNonce(): string {
@@ -126,7 +133,7 @@ export default class PactApi {
       nonce,
       code,
       data,
-      META,
+      meta(),
     )
   }
 
@@ -137,6 +144,10 @@ export default class PactApi {
 
   async send(sendRequest: ISendRequest): Promise<ISendResponse> {
     return this._post('/send', sendRequest)
+  }
+
+  async local(sendRequest: ILocalRequest): Promise<IListenResult> {
+    return this._post('/local', sendRequest)
   }
 
   async listen(listenRequest: IListenRequest): Promise<IListenResult> {
@@ -151,6 +162,38 @@ export default class PactApi {
     await this.send(sendRequest)
     const listenRequest = this.createListen(sendRequest)
     const { result } = await this.listen(listenRequest)
+    if (result.status === 'failure') {
+      throw new Error(`Pact eval failed with error: ${result.error!.message} - ${result.error!.info}`)
+    } else if (result.status !== 'success') {
+      throw new Error(`Pact eval failed with unknown status: '${result.status}'`)
+    }
+    return result.data!
+  }
+
+  /**
+   * Local eval for read-only operations.
+   */
+  async evalLocal(options: ISendOptions): Promise<{}> {
+    const nonce = options.nonce || generateNonce()
+    const code: string = (options.codeFile ? await loadFile(options.codeFile) : options.code) || ''
+    const data: {} = (options.dataFile ? JSON.parse(await loadFile(options.dataFile)) : options.data) || {}
+    const keyPair = {
+      publicKey: options.keyPair.publicKey.toString('hex'),
+      secretKey: options.keyPair.privateKey.toString('hex'),
+    }
+    if (!keyPair.publicKey) {
+      throw new Error('Public key is empty.')
+    } else if (!keyPair.secretKey) {
+      throw new Error('Private key is empty.')
+    }
+    const localRequest = pact.simple.exec.createLocalCommand(
+      keyPair,
+      nonce,
+      code,
+      data,
+      meta(),
+    )
+    const { result } = await this.local(localRequest)
     if (result.status === 'failure') {
       throw new Error(`Pact eval failed with error: ${result.error!.message} - ${result.error!.info}`)
     } else if (result.status !== 'success') {

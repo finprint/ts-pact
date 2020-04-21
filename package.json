@@ -22,7 +22,7 @@
     "@rauschma/stringio": "^1.4.0",
     "axios": "^0.19.0",
     "lodash": "4.17.15",
-    "pact-lang-api": "https://github.com/kadena-io/pact-lang-api.git#c63892c",
+    "pact-lang-api": "https://github.com/kadena-io/pact-lang-api.git#0ecc7f9",
     "tmp": "0.1.0"
   },
   "devDependencies": {
